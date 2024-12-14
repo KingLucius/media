@@ -576,6 +576,20 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     }
 
     setCodecDrmSession(sourceDrmSession);
+    if (codecDrmSession != null
+        && (codecDrmSession.getState() == DrmSession.STATE_OPENED
+        || codecDrmSession.getState() == DrmSession.STATE_OPENED_WITH_KEYS)) {
+      Log.w(
+          "issue-1732",
+          "drmSession.requiresSecureDecoder()="
+              + codecDrmSession.requiresSecureDecoder(checkStateNotNull(inputFormat.sampleMimeType)));
+    }
+    if (mediaCrypto != null) {
+      Log.w(
+          "issue-1732",
+          "mediaCrypto.requiresSecureDecoderComponent()="
+              + mediaCrypto.requiresSecureDecoderComponent(checkStateNotNull(inputFormat.sampleMimeType)));
+    }
     if (codecDrmSession == null || initMediaCryptoIfDrmSessionReady()) {
       try {
         boolean mediaCryptoRequiresSecureDecoder =
